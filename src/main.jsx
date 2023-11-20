@@ -8,6 +8,9 @@ import Home from './pages/Home/Home.jsx'
 import Root from './layouts/Root.jsx'
 import Login from './pages/Login/Login.jsx'
 import Register from './pages/Register/Register.jsx'
+import AuthProvider from './providers/AuthProvider.jsx'
+import News from './pages/News/News.jsx'
+import PrivateRoute from './PrivateRoute/privateRoute.jsx'
 
 const router = createBrowserRouter([
   {
@@ -16,7 +19,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home></Home>
+        element: <Home></Home>,
+        loader: () => fetch('/news.json')
+      },
+      {
+        path: '/news/:id',
+        element: <PrivateRoute><News></News></PrivateRoute>
       },
       {
         path: '/login',
@@ -32,6 +40,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </React.StrictMode>,
 )
